@@ -224,11 +224,11 @@ p { font-size: 32px; line-height: 1.45; }
 .live .overlay small { font: 400 24px "Open Sans", sans-serif; color: #D8D2D2; max-width: 760px; }
 .spin { width: 80px; height: 80px; border-radius: 50%; border: 8px solid #ffffff33; border-top-color: var(--red); animation: rot 1s linear infinite; }
 @keyframes rot { to { transform: rotate(360deg); } }
-.seg { display: flex; gap: 10px; margin-top: 22px; }
+.seg { display: flex; gap: 12px; margin-top: 30px; }
 .seg button { flex: 1; font: 600 26px "Roboto Mono", monospace; padding: 16px 12px; border-radius: 18px; border: 2px solid #ffffff30; background: transparent; color: #F5EFEA; cursor: pointer; transition: background .2s, transform .2s var(--pop); }
 .seg button:hover { transform: translateY(-3px); }
 .seg button.on { background: var(--red); border-color: var(--red); color: #fff; }
-.lstats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 26px; }
+.lstats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
 .lstat { background: #ffffff12; border-radius: 18px; padding: 14px 20px; }
 .lstat p { font: 600 20px "Roboto Mono", monospace; color: #A39D9D; }
 .lstat b { display: block; font: 700 36px "Roboto Mono", monospace; color: #fff; }
@@ -484,14 +484,14 @@ python demo.py --model models/pizza-yolo26n-fp16.engine</div>
       <div class="lstat"><p>device</p><b data-l="dev">-</b></div>
       <div class="lstat"><p>objects</p><b data-l="n">-</b></div>
     </div>
-    <div class="code a" style="--d:.6"><span class="k">import</span> { YOLO, annotate } <span class="k">from</span> <span class="s">"@ultralytics/yolo"</span>
-<span class="k">const</span> model = <span class="k">await</span> YOLO.<span class="f">load</span>(<span class="s">"pizza.onnx"</span>)
-<span class="k">const</span> r = <span class="k">await</span> model.<span class="f">predict</span>(video)
-<span class="k">await</span> <span class="f">annotate</span>(canvas, video, r)</div>
   </div>
   <div class="screen a zoom" style="--d:.2">
     <canvas width="1280" height="720"></canvas>
     <div class="overlay"></div>
+    <script>
+      if (location.protocol === "file:") document.currentScript.previousElementSibling.innerHTML =
+        '🌐 open me over http to run the models<small>In the talk folder: <b>python -m http.server</b>, then open <b>localhost:8000/presentation-anim.html#14</b>. Or use the GitHub Pages link.</small>';
+    </script>
   </div>
   <div class="foot"><img class="pp" src="Assets/assets/pythonpizza-logo-white.svg" alt=""><div class="sep"></div><img class="ul" src="Assets/assets/ultralytics-logo-white.svg" alt=""><span class="num">14</span></div>
   <aside class="notes">Same models, now in the browser with @ultralytics/yolo: Rust compiled to WebAssembly, running on WebGPU. Click 🌍 yolo26n for the normal COCO model on the webcam (people, phones, cups), then 🍕 pizza. Hold up a pizza photo on your phone, or click 🖼️ photos. Keys: M switches model, C switches source. Needs internet the first time (ONNX Runtime Web from cdn.pyke.io), and http(s), not file://. (~1 min)</aside>
