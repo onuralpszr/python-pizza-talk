@@ -234,6 +234,43 @@ p { font-size: 32px; line-height: 1.45; }
 .lstat b { display: block; font: 700 36px "Roboto Mono", monospace; color: #fff; }
 .live .code { font-size: 19px; padding: 20px 24px; margin-top: 26px; background: #00000055; border-radius: 20px; }
 
+/* ---------- extra animations ---------- */
+/* slide 4: walking pizza */
+.steps { position: relative; }
+.walker { position: absolute; left: -84px; top: 0; font-size: 60px; opacity: 0; transition: top .7s var(--pop), opacity .3s; pointer-events: none; }
+.walker.go { opacity: 1; animation: hop .7s var(--ease); }
+@keyframes hop { 40% { transform: translateY(-26px) rotate(-25deg) scale(1.2); } }
+/* slide 5: conf slider */
+.conf { display: flex; align-items: center; gap: 16px; margin-top: 22px; background: var(--cream); border-radius: 20px; padding: 12px 20px; }
+.conf span { font: 600 24px "Roboto Mono", monospace; color: var(--ink-dark); }
+.conf input { flex: 1; accent-color: var(--red); height: 30px; cursor: pointer; }
+.conf b { font: 700 26px "Roboto Mono", monospace; color: var(--red-dark); width: 70px; text-align: right; }
+svg.still * { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+/* slide 7: export morph */
+.flow.shown .box.src { animation: feed 1s var(--ease) both; }
+.flow.shown .box.fn { animation: chomp .5s .75s var(--pop) both; }
+.flow .target { opacity: 0; }
+.flow.shown .target { animation: pop .55s var(--pop) both; }
+.flow.shown .target:nth-child(1) { animation-delay: 1.15s; } .flow.shown .target:nth-child(2) { animation-delay: 1.3s; }
+.flow.shown .target:nth-child(3) { animation-delay: 1.45s; } .flow.shown .target:nth-child(4) { animation-delay: 1.6s; }
+@keyframes feed { 0% { transform: translateX(-60px); opacity: 0; } 60% { transform: translateX(30px); opacity: 1; } 100% { transform: none; } }
+@keyframes chomp { 0% { transform: scale(1); } 40% { transform: scale(1.18) rotate(-3deg); box-shadow: 0 0 0 12px #ED433733; } 100% { transform: none; } }
+/* slide 9: bit bars */
+.bits { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.bits p { display: flex; align-items: center; gap: 12px; font: 600 20px "Roboto Mono", monospace; color: var(--grey); }
+.bits p span { width: 60px; flex: none; }
+.bits i { display: flex; gap: 2px; }
+.bits u { width: 9px; height: 18px; border-radius: 2px; background: var(--red); transform: scaleY(0); }
+.bits p:nth-child(1) u { background: #D9CBC6; } .bits p:nth-child(2) u { background: #F08A80; }
+.card.shown .bits u { animation: bit .25s var(--pop) both; animation-delay: calc(var(--k) * 18ms + .3s); }
+@keyframes bit { to { transform: scaleY(1); } }
+/* slide 12: flying pizzas */
+.fly { position: absolute !important; left: -160px; font-size: 90px; pointer-events: none; animation: fly 2.2s cubic-bezier(.5,0,.5,1) forwards; }
+@keyframes fly { 0% { transform: translateX(0) rotate(0); } 50% { transform: translateX(1100px) translateY(-60px) rotate(400deg); } 100% { transform: translateX(2300px) rotate(800deg); } }
+/* thanks: QR flip */
+.active .a.flip { animation-name: flip; animation-duration: .9s; animation-timing-function: var(--pop); }
+@keyframes flip { from { opacity: 0; transform: perspective(900px) rotateY(-100deg); } to { opacity: 1; transform: none; } }
+
 /* demo + thanks */
 .demo .cmd { margin-top: 54px; background: #00000030; border-radius: 26px; padding: 36px 46px; font-family: "Roboto Mono", monospace; font-size: 38px; line-height: 1.6; white-space: pre; }
 .thanks h2 { color: #fff; font-size: 96px; margin-top: 40px; text-shadow: 0 6px 30px #0000004d; }
@@ -249,6 +286,7 @@ p { font-size: 32px; line-height: 1.45; }
 /* ?static: no motion, final state (layout checks) */
 .static *, .static *::before, .static *::after { animation: none !important; transition: none !important; }
 .static .a, .static .frag, .static .trow, .static .bxfill, .static .lbl { opacity: 1 !important; transform: none !important; }
+.static .bits u { transform: none; } .static .flow .target { opacity: 1; } .static .walker { opacity: 1; }
 .static .ln { clip-path: none; } .static .bar div { transform: none; } .static .type { width: 15.2ch; } .static .bx { stroke-dashoffset: 0; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; } }
 </style>
@@ -318,11 +356,12 @@ p { font-size: 32px; line-height: 1.45; }
 </section>
 
 <!-- 4 · My pizza model -->
-<section class="cream">
+<section class="cream" data-hook="pipe">
   <p class="kicker a">today’s model 🍕</p>
   <h2 class="a" style="--d:.15">I had zero pizza photos. 😅</h2>
   <div class="cols" style="align-items:stretch;margin-top:36px">
     <div class="steps">
+      <span class="walker">🍕</span>
       <div class="step frag"><div class="e">🎨</div><div><h3>Generate</h3><p>2,376 pizza scenes made with ComfyUI</p></div></div>
       <div class="step frag"><div class="e">🏷️</div><div><h3>Auto-label</h3><p>a detector draws the first boxes for me</p></div></div>
       <div class="step frag"><div class="e">🛠️</div><div><h3>Fix</h3><p>clean up mistakes on Ultralytics Platform</p></div></div>
@@ -344,6 +383,7 @@ p { font-size: 32px; line-height: 1.45; }
     <h2 class="a" style="--d:.15">What does predict() see?</h2>
     <p class="soft a" style="font-size:28px;margin-top:16px;--d:.3">Real boxes from my pizza model, on images it never trained on. Drag the slider! 👆</p>
     <div class="stats a" style="--d:.45"><span class="stat">🍕 <b data-k="pizza">0</b> pizza</span><span class="stat">🔺 <b data-k="slice">0</b> slices</span><span class="stat">⏱️ <b data-k="ms">0</b> ms</span></div>
+    <div class="conf a" style="--d:.5"><span>conf</span><input type="range" min="0.1" max="0.95" step="0.05" value="0.4" aria-label="confidence threshold"><b>0.40</b></div>
     <div class="thumbs a" style="--d:.6"></div>
     <p class="keys a" style="--d:.8"><kbd>→</kbd> reveal / next image &nbsp; <kbd>B</kbd> before &nbsp; <kbd>A</kbd> after</p>
   </div>
@@ -408,7 +448,7 @@ p { font-size: 32px; line-height: 1.45; }
   <div class="cards3" style="margin-top:36px">
     <div class="card frag"><h3>🍕 Model size</h3><p>Start with nano. Go bigger only if you need it.</p><p class="val">26s 1.4 ms, mAP 0.849<br>26n 1.0 ms, mAP 0.858</p></div>
     <div class="card frag"><h3>🖼️ Image size</h3><p>Fewer pixels, less work. Fine when objects are big.</p><p class="val">640px 1.0 ms, mAP 0.858<br>320px 0.5 ms, mAP 0.807</p></div>
-    <div class="card frag"><h3>🔢 Precision</h3><p>FP32, FP16, INT8. INT8 needs a few calibration images.</p><p class="val">FP16 1.0 ms, mAP 0.858<br>INT8 1.8 ms, mAP 0.846</p></div>
+    <div class="card frag"><h3>🔢 Precision</h3><p>FP32, FP16, INT8. INT8 needs a few calibration images.</p><p class="val">FP16 1.0 ms, mAP 0.858<br>INT8 1.8 ms, mAP 0.846</p><div class="bits"><p><span>FP32</span><i data-n="32"></i></p><p><span>FP16</span><i data-n="16"></i></p><p><span>INT8</span><i data-n="8"></i></p></div></div>
   </div>
   <div class="insight frag"><p class="e">🤯</p><div><h3>Plot twist: INT8 was slower than FP16 here!</h3><p>1.8 ms vs 1.0 ms. Smaller numbers are not always faster. Always test on your own device.</p></div></div>
   <p class="note a" style="--d:.4">TensorRT on my laptop (NVIDIA RTX Spark N1X), batch 1, 238 validation images, mAP = mAP50-95</p>
@@ -451,9 +491,9 @@ p { font-size: 32px; line-height: 1.45; }
 </section>
 
 <!-- 12 · Big number -->
-<section class="red statement">
+<section class="red statement" data-hook="boom">
   <p class="kicker a">result 🚀</p>
-  <p class="big a pop" style="--d:.2"><span data-count="3.0" data-dec="1">3.0</span>× faster</p>
+  <p class="big a pop" style="--d:.2"><span data-count="3.0" data-dec="1" data-ease="back">3.0</span>× faster</p>
   <h2 class="a" style="font-size:54px;margin-top:30px;--d:.6">than PyTorch on the same GPU.<br><span data-count="301" data-dec="0">301</span>× faster than PyTorch on CPU.</h2>
   <p class="a" style="font-size:36px;margin-top:28px;--d:1">Same accuracy: mAP 0.858 vs 0.859. That is <span data-count="1010" data-dec="0">1010</span> pizzas per second! 🍕🍕🍕</p>
   <div class="foot"><img class="pp" src="Assets/assets/pythonpizza-logo-white.svg" alt=""><div class="sep"></div><img class="ul" src="Assets/assets/ultralytics-logo-white.svg" alt=""><span class="num">12</span></div>
@@ -508,9 +548,9 @@ python demo.py --model models/pizza-yolo26n-fp16.engine</div>
   <h2 class="a pop" style="--d:.6">Grazie! Teşekkürler! 🍕</h2>
   <div class="take"><p class="a pop" style="--d:1">1️⃣ Start small</p><p class="a pop" style="--d:1.2">2️⃣ Export for your device</p><p class="a pop" style="--d:1.4">3️⃣ Always measure</p></div>
   <div class="qrs">
-    <div class="q a" style="--d:1.7"><img src="Assets/assets/qr-models.png" alt="QR: trained models"><h3>🏋️ Models</h3><p>all training runs</p></div>
-    <div class="q a" style="--d:1.85"><img src="Assets/assets/qr-dataset.png" alt="QR: pizza dataset"><h3>🍕 Dataset</h3><p>2,376 pizza images</p></div>
-    <div class="q a" style="--d:2"><img src="Assets/assets/gravatar-qr.png" alt="QR: Onuralp's links"><h3>👋 Me</h3><p>@onuralpszr</p></div>
+    <div class="q a flip" style="--d:1.7"><img src="Assets/assets/qr-models.png" alt="QR: trained models"><h3>🏋️ Models</h3><p>all training runs</p></div>
+    <div class="q a flip" style="--d:1.85"><img src="Assets/assets/qr-dataset.png" alt="QR: pizza dataset"><h3>🍕 Dataset</h3><p>2,376 pizza images</p></div>
+    <div class="q a flip" style="--d:2"><img src="Assets/assets/gravatar-qr.png" alt="QR: Onuralp's links"><h3>👋 Me</h3><p>@onuralpszr</p></div>
   </div>
   <img class="wave" src="Assets/assets/wave.svg" alt="">
   <aside class="notes">Start small, export for your hardware, and measure after every export. Scan the QR codes. Thank you! Teşekkürler! Press P for more pizza rain. (9:00–10:00)</aside>
@@ -522,7 +562,7 @@ python demo.py --model models/pizza-yolo26n-fp16.engine</div>
 
 <script>
 if (location.search.includes("static")) document.documentElement.classList.add("static");
-const BOXES = {"0000000.jpg": {"w": 1216, "h": 832, "ms": 3.53, "boxes": [[702.9, 376.5, 960.5, 594.1, "pizza_slice", 0.93], [1043.6, 380.6, 1160.5, 411.2, "pizza_slice", 0.45]]}, "0000040.jpg": {"w": 1216, "h": 832, "ms": 3.3, "boxes": [[63.5, 210.7, 294.2, 485.3, "pizza_slice", 0.94], [393.7, 53.4, 1070.9, 789.8, "pizza", 0.92]]}, "0001030.jpg": {"w": 768, "h": 768, "ms": 6.92, "boxes": [[332.0, 467.4, 608.3, 750.8, "pizza_slice", 0.95], [168.3, 328.3, 426.4, 515.7, "pizza_slice", 0.95], [184.9, 164.0, 432.0, 327.7, "pizza", 0.94], [3.8, 466.2, 238.6, 766.6, "pizza_slice", 0.94], [454.7, 103.7, 748.1, 485.9, "pizza", 0.9]]}, "0001180.jpg": {"w": 912, "h": 624, "ms": 3.13, "boxes": [[511.7, 194.0, 691.6, 396.5, "pizza_slice", 0.94], [852.7, 519.7, 912.0, 609.7, "pizza_slice", 0.83]]}, "0001190.jpg": {"w": 912, "h": 624, "ms": 2.83, "boxes": [[50.6, 221.6, 277.6, 443.9, "pizza_slice", 0.96], [241.1, 84.1, 408.6, 235.3, "pizza_slice", 0.95], [433.5, 164.0, 831.7, 518.5, "pizza", 0.93]]}, "0001220.jpg": {"w": 672, "h": 864, "ms": 8.7, "boxes": [[391.1, 559.1, 618.5, 721.7, "pizza", 0.93], [240.9, 376.8, 347.6, 474.3, "pizza_slice", 0.92]]}, "0001240.jpg": {"w": 912, "h": 624, "ms": 3.26, "boxes": [[560.5, 88.5, 800.4, 286.4, "pizza_slice", 0.95], [76.6, 182.4, 404.3, 344.5, "pizza_slice", 0.95], [279.2, 72.8, 526.8, 271.9, "pizza_slice", 0.94], [281.3, 274.8, 652.4, 473.3, "pizza_slice", 0.93], [567.2, 279.5, 790.9, 471.3, "pizza_slice", 0.87]]}, "0001250.jpg": {"w": 864, "h": 672, "ms": 5.5, "boxes": [[57.1, 333.2, 402.0, 566.8, "pizza_slice", 0.95], [458.7, 265.9, 807.8, 509.3, "pizza_slice", 0.95]]}, "0001300.jpg": {"w": 672, "h": 864, "ms": 3.1, "boxes": [[3.1, 551.1, 353.0, 812.5, "pizza_slice", 0.96], [287.1, 431.4, 641.3, 651.6, "pizza_slice", 0.96], [3.2, 356.0, 254.4, 507.3, "pizza_slice", 0.95]]}, "0001380.jpg": {"w": 624, "h": 912, "ms": 5.79, "boxes": [[53.0, 211.8, 464.3, 552.8, "pizza", 0.96], [216.1, 562.7, 409.5, 812.8, "pizza_slice", 0.95], [420.1, 105.3, 581.0, 246.4, "pizza_slice", 0.94], [102.2, 97.9, 246.4, 256.6, "pizza_slice", 0.92]]}, "0005010.jpg": {"w": 672, "h": 864, "ms": 3.14, "boxes": [[302.5, 407.4, 587.3, 668.8, "pizza", 0.96], [204.6, 153.4, 443.1, 351.8, "pizza", 0.96], [22.0, 303.3, 250.8, 503.3, "pizza", 0.95]]}, "0005020.jpg": {"w": 912, "h": 624, "ms": 3.06, "boxes": [[733.6, 198.9, 866.7, 375.2, "pizza_slice", 0.95], [78.2, 79.2, 420.3, 382.7, "pizza", 0.95], [441.8, 413.1, 604.0, 583.3, "pizza_slice", 0.94], [587.0, 290.8, 713.0, 443.9, "pizza_slice", 0.94], [530.5, 84.4, 652.5, 254.1, "pizza_slice", 0.94]]}, "0005040.jpg": {"w": 768, "h": 768, "ms": 3.06, "boxes": [[423.5, 325.7, 568.8, 462.2, "pizza_slice", 0.88], [681.5, 482.6, 713.9, 522.1, "pizza_slice", 0.81], [167.9, 336.8, 273.7, 469.5, "pizza_slice", 0.77], [430.8, 89.5, 552.9, 179.8, "pizza", 0.54], [167.3, 336.2, 274.4, 468.6, "pizza", 0.42]]}, "0005070.jpg": {"w": 672, "h": 864, "ms": 3.06, "boxes": [[13.7, 149.0, 308.0, 279.7, "pizza", 0.95], [339.1, 503.5, 631.0, 817.6, "pizza_slice", 0.95], [378.5, 253.1, 611.4, 422.7, "pizza_slice", 0.89], [5.1, 323.2, 390.4, 546.3, "pizza", 0.88]]}, "0005130.jpg": {"w": 768, "h": 768, "ms": 3.18, "boxes": [[423.3, 314.7, 562.2, 462.0, "pizza_slice", 0.93], [1.3, 671.6, 265.4, 768.0, "pizza", 0.8]]}, "0005150.jpg": {"w": 912, "h": 624, "ms": 2.95, "boxes": [[563.0, 189.6, 824.4, 319.1, "pizza_slice", 0.94], [32.4, 281.9, 372.3, 491.8, "pizza_slice", 0.92], [45.6, 267.5, 711.3, 543.3, "pizza", 0.4]]}, "0005160.jpg": {"w": 912, "h": 624, "ms": 2.62, "boxes": [[14.5, 324.0, 227.8, 516.8, "pizza", 0.94], [241.6, 284.9, 418.7, 443.5, "pizza_slice", 0.93]]}};
+const BOXES = {"0000000.jpg": {"w": 1216, "h": 832, "ms": 3.64, "boxes": [[702.9, 376.5, 960.5, 594.1, "pizza_slice", 0.93], [1043.6, 380.6, 1160.5, 411.2, "pizza_slice", 0.45]]}, "0000040.jpg": {"w": 1216, "h": 832, "ms": 3.3, "boxes": [[63.5, 210.7, 294.2, 485.3, "pizza_slice", 0.94], [393.7, 53.4, 1070.9, 789.8, "pizza", 0.92]]}, "0001030.jpg": {"w": 768, "h": 768, "ms": 6.59, "boxes": [[332.0, 467.4, 608.3, 750.8, "pizza_slice", 0.95], [168.3, 328.3, 426.4, 515.7, "pizza_slice", 0.95], [184.9, 164.0, 432.0, 327.7, "pizza", 0.94], [3.8, 466.2, 238.6, 766.6, "pizza_slice", 0.94], [454.7, 103.7, 748.1, 485.9, "pizza", 0.9], [1.8, 223.6, 122.3, 404.1, "pizza_slice", 0.35]]}, "0001180.jpg": {"w": 912, "h": 624, "ms": 2.99, "boxes": [[511.7, 194.0, 691.6, 396.5, "pizza_slice", 0.94], [852.7, 519.7, 912.0, 609.7, "pizza_slice", 0.83]]}, "0001190.jpg": {"w": 912, "h": 624, "ms": 2.77, "boxes": [[50.6, 221.6, 277.6, 443.9, "pizza_slice", 0.96], [241.1, 84.1, 408.6, 235.3, "pizza_slice", 0.95], [433.5, 164.0, 831.7, 518.5, "pizza", 0.93]]}, "0001220.jpg": {"w": 672, "h": 864, "ms": 6.33, "boxes": [[391.1, 559.1, 618.5, 721.7, "pizza", 0.93], [240.9, 376.8, 347.6, 474.3, "pizza_slice", 0.92]]}, "0001240.jpg": {"w": 912, "h": 624, "ms": 3.17, "boxes": [[560.5, 88.5, 800.4, 286.4, "pizza_slice", 0.95], [76.6, 182.4, 404.3, 344.5, "pizza_slice", 0.95], [279.2, 72.8, 526.8, 271.9, "pizza_slice", 0.94], [281.3, 274.8, 652.4, 473.3, "pizza_slice", 0.93], [567.2, 279.5, 790.9, 471.3, "pizza_slice", 0.87]]}, "0001250.jpg": {"w": 864, "h": 672, "ms": 5.46, "boxes": [[57.1, 333.2, 402.0, 566.8, "pizza_slice", 0.95], [458.7, 265.9, 807.8, 509.3, "pizza_slice", 0.95]]}, "0001300.jpg": {"w": 672, "h": 864, "ms": 3.02, "boxes": [[3.1, 551.1, 353.0, 812.5, "pizza_slice", 0.96], [287.1, 431.4, 641.3, 651.6, "pizza_slice", 0.96], [3.2, 356.0, 254.4, 507.3, "pizza_slice", 0.95]]}, "0001380.jpg": {"w": 624, "h": 912, "ms": 5.58, "boxes": [[53.0, 211.8, 464.3, 552.8, "pizza", 0.96], [216.1, 562.7, 409.5, 812.8, "pizza_slice", 0.95], [420.1, 105.3, 581.0, 246.4, "pizza_slice", 0.94], [102.2, 97.9, 246.4, 256.6, "pizza_slice", 0.92]]}, "0005010.jpg": {"w": 672, "h": 864, "ms": 2.95, "boxes": [[302.5, 407.4, 587.3, 668.8, "pizza", 0.96], [204.6, 153.4, 443.1, 351.8, "pizza", 0.96], [22.0, 303.3, 250.8, 503.3, "pizza", 0.95]]}, "0005020.jpg": {"w": 912, "h": 624, "ms": 2.91, "boxes": [[733.6, 198.9, 866.7, 375.2, "pizza_slice", 0.95], [78.2, 79.2, 420.3, 382.7, "pizza", 0.95], [441.8, 413.1, 604.0, 583.3, "pizza_slice", 0.94], [587.0, 290.8, 713.0, 443.9, "pizza_slice", 0.94], [530.5, 84.4, 652.5, 254.1, "pizza_slice", 0.94]]}, "0005040.jpg": {"w": 768, "h": 768, "ms": 3.02, "boxes": [[423.5, 325.7, 568.8, 462.2, "pizza_slice", 0.88], [681.5, 482.6, 713.9, 522.1, "pizza_slice", 0.81], [167.9, 336.8, 273.7, 469.5, "pizza_slice", 0.77], [430.8, 89.5, 552.9, 179.8, "pizza", 0.54], [167.3, 336.2, 274.4, 468.6, "pizza", 0.42]]}, "0005070.jpg": {"w": 672, "h": 864, "ms": 3.71, "boxes": [[13.7, 149.0, 308.0, 279.7, "pizza", 0.95], [339.1, 503.5, 631.0, 817.6, "pizza_slice", 0.95], [378.5, 253.1, 611.4, 422.7, "pizza_slice", 0.89], [5.1, 323.2, 390.4, 546.3, "pizza", 0.88]]}, "0005130.jpg": {"w": 768, "h": 768, "ms": 3.0, "boxes": [[423.3, 314.7, 562.2, 462.0, "pizza_slice", 0.93], [1.3, 671.6, 265.4, 768.0, "pizza", 0.8], [0.2, 671.0, 267.4, 768.0, "pizza_slice", 0.12]]}, "0005150.jpg": {"w": 912, "h": 624, "ms": 2.75, "boxes": [[563.0, 189.6, 824.4, 319.1, "pizza_slice", 0.94], [32.4, 281.9, 372.3, 491.8, "pizza_slice", 0.92], [45.6, 267.5, 711.3, 543.3, "pizza", 0.4], [314.1, 269.4, 721.7, 545.0, "pizza_slice", 0.2]]}, "0005160.jpg": {"w": 912, "h": 624, "ms": 3.0, "boxes": [[14.5, 324.0, 227.8, 516.8, "pizza", 0.94], [241.6, 284.9, 418.7, 443.5, "pizza_slice", 0.93]]}};
 const BA_IMAGES = ["0005040.jpg", "0001030.jpg", "0005020.jpg", "0001240.jpg", "0005070.jpg", "0001190.jpg"];
 const RAW_DIR = "images/";
 
@@ -553,7 +593,7 @@ function show(i, back = false) {
 }
 function next() {
   const f = slides[cur].querySelector(".frag:not(.shown)");
-  if (f) { f.classList.add("shown"); const act = f.dataset.act; if (act) hooks[slides[cur].dataset.hook]?.[act]?.(); return; }
+  if (f) { f.classList.add("shown"); const hk = hooks[slides[cur].dataset.hook]; const act = f.dataset.act; if (act) hk?.[act]?.(); hk?.frag?.(f); return; }
   if (cur < slides.length - 1) show(cur + 1);
 }
 function prev() {
@@ -567,7 +607,7 @@ function countUp(el) {
   const t0 = performance.now(), dur = 1600, delay = 400;
   el.textContent = from.toFixed(dec);
   const step = t => {
-    const p = Math.min(1, Math.max(0, (t - t0 - delay) / dur)), e = 1 - Math.pow(1 - p, 3);
+    const p = Math.min(1, Math.max(0, (t - t0 - delay) / dur)), e = el.dataset.ease === "back" ? 1 + 2.70158 * Math.pow(p - 1, 3) + 1.70158 * Math.pow(p - 1, 2) : 1 - Math.pow(1 - p, 3);
     el.textContent = (from + (to - from) * e).toFixed(dec);
     if (p < 1 && slides[cur].contains(el)) requestAnimationFrame(step); else el.textContent = to.toFixed(dec);
   };
@@ -579,14 +619,15 @@ const ba = (() => {
   const s = document.querySelector('[data-hook="ba"]');
   const cmp = s.querySelector(".cmp"), wrap = s.querySelector(".cmpwrap"), svg = cmp.querySelector("svg");
   const thumbs = s.querySelector(".thumbs");
-  let idx = 0, x = 100, anim = 0;
+  let idx = 0, x = 100, anim = 0, conf = 0.4;
+  const range = s.querySelector(".conf input"), confOut = s.querySelector(".conf b");
   const setX = v => { x = Math.max(0, Math.min(100, v)); cmp.style.setProperty("--x", x + "%"); };
   BA_IMAGES.forEach((n, k) => {
     const t = document.createElement("img"); t.src = RAW_DIR + n; t.alt = n;
     t.onclick = () => { load(k); sweep(); };
     thumbs.appendChild(t);
   });
-  function load(k) {
+  function load(k, scan = 1.4, still = false) {
     idx = (k + BA_IMAGES.length) % BA_IMAGES.length;
     const name = BA_IMAGES[idx], d = BOXES[name];
     const maxW = wrap.clientWidth || 1000, maxH = 800, sc = Math.min(maxW / d.w, maxH / d.h);
@@ -595,16 +636,18 @@ const ba = (() => {
     [...thumbs.children].forEach((t, j) => t.classList.toggle("on", j === idx));
     svg.setAttribute("viewBox", `0 0 ${d.w} ${d.h}`);
     const sw = Math.max(d.w, d.h) / 160, fs = Math.max(d.w, d.h) / 48;
-    svg.innerHTML = d.boxes.map(([x1, y1, x2, y2, cls, conf], j) => {
+    const boxes = d.boxes.filter(b => b[5] >= conf);
+    svg.classList.toggle("still", still);
+    svg.innerHTML = boxes.map(([x1, y1, x2, y2, cls, conf], j) => {
       const c = cls === "pizza" ? "#ED4337" : "#FFB020", tc = cls === "pizza" ? "#fff" : "#2E2C2C";
-      const dl = (.35 + j * .22).toFixed(2), label = `${cls === "pizza" ? "pizza" : "slice"} ${conf.toFixed(2)}`;
+      const dl = (scan * (1 - x2 / d.w) * .9 + .1).toFixed(2), label = `${cls === "pizza" ? "pizza" : "slice"} ${conf.toFixed(2)}`;
       const lw = label.length * fs * .62 + fs * .6, ly = y1 - fs * 1.35 < 0 ? y1 + sw : y1 - fs * 1.35;
       return `<rect class="bxfill" x="${x1}" y="${y1}" width="${x2 - x1}" height="${y2 - y1}" rx="${sw * 2}" fill="${c}22" style="animation-delay:${dl}s"/>` +
         `<rect class="bx" pathLength="1" x="${x1}" y="${y1}" width="${x2 - x1}" height="${y2 - y1}" rx="${sw * 2}" stroke="${c}" stroke-width="${sw}" style="animation-delay:${dl}s"/>` +
         `<g class="lbl" style="animation-delay:${(+dl + .45).toFixed(2)}s"><rect x="${x1 - sw / 2}" y="${ly}" width="${lw}" height="${fs * 1.35}" rx="${fs * .3}" fill="${c}"/>` +
         `<text x="${x1 + fs * .3}" y="${ly + fs * 1.02}" font-family="Roboto Mono, monospace" font-weight="700" font-size="${fs}" fill="${tc}">${label}</text></g>`;
     }).join("");
-    const n = cls => d.boxes.filter(b => b[4] === cls).length;
+    const n = cls => boxes.filter(b => b[4] === cls).length;
     s.querySelector('[data-k="pizza"]').textContent = n("pizza");
     s.querySelector('[data-k="slice"]').textContent = n("pizza_slice");
     s.querySelector('[data-k="ms"]').textContent = d.ms.toFixed(1);
@@ -622,6 +665,7 @@ const ba = (() => {
     setTimeout(() => tween(50, 900), 2600);
     if (document.documentElement.classList.contains("static")) { cancelAnimationFrame(anim); setX(50); }
   }
+  range.addEventListener("input", () => { conf = +range.value; confOut.textContent = conf.toFixed(2); if (x > 98) setX(50); load(idx, 0, true); });
   let drag = false;
   const pos = e => { const r = cmp.getBoundingClientRect(); setX((e.clientX - r.left) / r.width * 100); };
   cmp.addEventListener("pointerdown", e => { drag = true; cancelAnimationFrame(anim); cmp.setPointerCapture(e.pointerId); pos(e); });
@@ -629,7 +673,7 @@ const ba = (() => {
   cmp.addEventListener("pointerup", () => drag = false);
   return {
     enter(back) { idx = back ? BA_IMAGES.length - 1 : 0; setX(back ? 50 : 100); load(idx); },
-    sweep, next() { load(idx + 1); setX(100); tween(0, 900); setTimeout(() => tween(50, 700), 1900); },
+    sweep, next() { load(idx + 1, .9); setX(100); tween(0, 900); setTimeout(() => tween(50, 700), 1900); },
     before() { tween(100, 600); }, after() { tween(0, 600); },
   };
 })();
@@ -672,11 +716,28 @@ const rain = (() => {
   }
   return { enter() { setTimeout(() => slides[cur] === s && drop(), 1500); }, drop };
 })();
-const hooks = { ba, race, rain };
+/* slide 4: walking pizza */
+const pipe = (() => {
+  const s = document.querySelector('[data-hook="pipe"]'), w = s.querySelector(".walker");
+  const to = f => { w.style.top = (f.offsetTop + f.offsetHeight / 2 - 40) + "px"; w.classList.remove("go"); w.getBoundingClientRect(); w.classList.add("go"); };
+  return {
+    enter(back) { w.classList.remove("go"); if (back) { const all = s.querySelectorAll(".step"); to(all[all.length - 1]); } },
+    frag: to,
+  };
+})();
+/* slide 9: bit cells */
+document.querySelectorAll(".bits i").forEach(i => { i.innerHTML = Array.from({ length: +i.dataset.n }, (_, k) => `<u style="--k:${k}"></u>`).join(""); });
+/* slide 12: flying pizzas */
+const boom = (() => {
+  const s = document.querySelector('[data-hook="boom"]');
+  return { enter() { [0, 1, 2].forEach(k => setTimeout(() => { if (slides[cur] !== s) return; const e = document.createElement("span"); e.className = "fly"; e.textContent = "🍕"; e.style.top = (640 + k * 70) + "px"; e.onanimationend = () => e.remove(); s.appendChild(e); }, 2300 + k * 260)); } };
+})();
+const hooks = { ba, race, rain, pipe, boom };
 document.querySelectorAll(".trow").forEach((r, k) => { r.style.animationDelay = (.45 + k * .15) + "s"; r.querySelector(".bar div").style.animationDelay = (.7 + k * .15) + "s"; });
 
 /* ---------- input ---------- */
 addEventListener("keydown", e => {
+  if (e.target.closest?.("input")) return;
   const k = e.key;
   if (["ArrowRight", "ArrowDown", " ", "PageDown", "Enter"].includes(k)) { e.preventDefault(); next(); }
   else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); prev(); }
@@ -693,7 +754,7 @@ addEventListener("keydown", e => {
   else if (/^[0-9]$/.test(k)) { numBuf += k; clearTimeout(numT); numT = setTimeout(() => { show(+numBuf - 1); numBuf = ""; }, 500); }
 });
 let numBuf = "", numT;
-addEventListener("click", e => { if (e.target.closest(".cmp, .thumbs, a, button, canvas")) return; e.clientX > innerWidth / 3 ? next() : prev(); });
+addEventListener("click", e => { if (e.target.closest(".cmp, .thumbs, .conf, a, button, canvas")) return; e.clientX > innerWidth / 3 ? next() : prev(); });
 setTimeout(() => document.getElementById("hint").style.opacity = 0, 5000);
 
 /* ---------- speaker notes window (open with N, stays in sync) ---------- */
