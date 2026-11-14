@@ -1,0 +1,21 @@
+{
+  "name": "ultralytics-inference-web",
+  "type": "module",
+  "description": "Browser/WebAssembly bindings for ultralytics-inference (WebGPU via ort-web)",
+  "version": "0.0.60",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ultralytics/inference"
+  },
+  "files": [
+    "ultralytics_inference_web_bg.wasm",
+    "ultralytics_inference_web.js",
+    "ultralytics_inference_web.d.ts"
+  ],
+  "main": "ultralytics_inference_web.js",
+  "types": "ultralytics_inference_web.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

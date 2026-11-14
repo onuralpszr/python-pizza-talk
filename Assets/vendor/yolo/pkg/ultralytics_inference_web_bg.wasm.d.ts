@@ -1,0 +1,34 @@
+/* tslint:disable */
+/* eslint-disable */
+export const memory: WebAssembly.Memory;
+export const __wbg_yolomodel_free: (a: number, b: number) => void;
+export const __wbg_yolopipeline_free: (a: number, b: number) => void;
+export const bidi_runs: (a: number, b: number, c: number) => void;
+export const pose_palette: (a: number) => void;
+export const start: () => void;
+export const yolomodel_device: (a: number, b: number) => void;
+export const yolomodel_load_bytes: (a: number, b: number, c: number, d: number, e: number, f: number) => number;
+export const yolomodel_names: (a: number, b: number) => void;
+export const yolomodel_predict: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => number;
+export const yolomodel_predict_rgba: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number) => number;
+export const yolomodel_reset_tracker: (a: number) => void;
+export const yolomodel_task: (a: number, b: number) => void;
+export const yolopipeline_inputShape: (a: number, b: number) => void;
+export const yolopipeline_names: (a: number, b: number) => void;
+export const yolopipeline_new: (a: number, b: number, c: number) => void;
+export const yolopipeline_postprocess: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number, p: number, q: number) => void;
+export const yolopipeline_preprocess_rgba: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+export const yolopipeline_reset_tracker: (a: number) => void;
+export const yolopipeline_setInputShape: (a: number, b: number, c: number) => void;
+export const yolopipeline_task: (a: number, b: number) => void;
+export const __wasm_bindgen_func_elem_1320: (a: number, b: number, c: number, d: number) => void;
+export const __wasm_bindgen_func_elem_1951: (a: number, b: number, c: number, d: number) => void;
+export const __wasm_bindgen_func_elem_1975: (a: number, b: number, c: number, d: number) => void;
+export const __wasm_bindgen_func_elem_390: (a: number, b: number, c: number, d: number) => void;
+export const __wbindgen_export: (a: number, b: number) => number;
+export const __wbindgen_export2: (a: number, b: number, c: number, d: number) => number;
+export const __wbindgen_export3: (a: number) => void;
+export const __wbindgen_export4: (a: number, b: number, c: number) => void;
+export const __wbindgen_export5: (a: number, b: number) => void;
+export const __wbindgen_add_to_stack_pointer: (a: number) => number;
+export const __wbindgen_start: () => void;
